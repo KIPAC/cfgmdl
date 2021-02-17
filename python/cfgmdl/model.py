@@ -158,8 +158,9 @@ class Model:
         clear_derived = kwcopy.pop('clear_derived', True)
 
         try:
-            prop = self._properties[name]
-            prop.__set__(kwcopy)
+            #prop = self._properties[name]
+            #prop.__set__(self, kwcopy)
+            setattr(self, name, kwcopy)
         except TypeError as msg:
             raise TypeError("Failed to set Property %s" % name) from msg
 
@@ -179,14 +180,11 @@ class Model:
             # Raise AttributeError if param not found
             try:
                 self.getp(name)
-            except KeyError:
-                print ("Warning: %s does not have attribute %s" %
-                       (type(self), name))
+            except KeyError as msg:
+                raise KeyError("Warning: %s does not have attribute %s" %
+                       (type(self), name)) from msg
             # Set attributes
-            try:
-                self.setp(name, clear_derived=False, value=value)
-            except (TypeError, KeyError):
-                self.__setattr__(name, value)
+            self.setp(name, clear_derived=False, value=value)
             # pop this attribued off the list of missing properties
             self._missing.pop(name, None)
         # Check to make sure we got all the required properties
@@ -283,9 +281,9 @@ class Model:
 
         This is called by setp (and by extension __setattr__)
         """
-        for p in self._properties.values():
+        for k, p in self._properties.items():
             if isinstance(p, Derived):
-                del p
+                delattr(self, k)
 
     def todict(self):
         """ Return self cast as an '~collections.OrderedDict' object

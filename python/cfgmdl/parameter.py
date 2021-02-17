@@ -45,7 +45,6 @@ class Parameter(Property):
         value : ...
             The value being set
 
-
         Rasies
         ------
         TypeError : The input value is the wrong type (i.e., not castable to Darray)
@@ -82,10 +81,13 @@ class Parameter(Property):
     def validate_value(self, value):
         """Validate a value
 
-        In this case this does bounds-checking, invoked during assignment.
+        In this case this does type-checking and bounds-checking
 
-        raises ValueError if value is outside of bounds.
-        does nothing if bounds is set to None.
+        Rasies
+        ------
+        TypeError : The input value is the wrong type (i.e., not float or float64)
+
+        ValueError : The input values fail the bounds check
         """
         if is_none(value):
             return

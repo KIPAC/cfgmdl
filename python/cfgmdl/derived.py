@@ -41,7 +41,11 @@ class Derived(Property):
 
         If it is not cached then it invokes the `self.loader` function to compute the value, and caches the computed value
         """
-        val = getattr(obj, self.private_name)
+        try:
+            val = getattr(obj, self.private_name)
+        except AttributeError:
+            val = None
+
         if val is not None:
             return val
 

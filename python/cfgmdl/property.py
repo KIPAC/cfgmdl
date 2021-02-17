@@ -73,6 +73,7 @@ class Property:
             setattr(obj, self.private_name, None)
             raise msg
         setattr(obj, self.private_name, cast_value)
+        obj.clear_derived()
 
     def __get__(self, obj, objtype=None):
         """Get the value from the client object
@@ -110,6 +111,7 @@ class Property:
             if k not in defaults:
                 msg = "Unrecognized attribute of %s: %s" % (self.__class__.__name__, k)
                 raise AttributeError(msg)
+
         defaults.update(kwargs)
 
         # This doesn't overwrite the properties

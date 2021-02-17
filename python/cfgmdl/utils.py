@@ -3,24 +3,15 @@
 A few simple utilities to help parse configurations
 """
 
-import numpy as np
-
-
 try:
     basestring
 except NameError:
     basestring = str
 
 
-def defaults_docstring(defaults, header=None, indent=None, footer=None):
+def defaults_docstring(defaults, header='', indent='', footer=''):
     """Return a docstring from a list of defaults.
     """
-    if indent is None:
-        indent = ''
-    if header is None:
-        header = ''
-    if footer is None:
-        footer = ''
 
     #width = 60
     #hbar = indent + width * '=' + '\n'  # horizontal bar
@@ -58,16 +49,9 @@ def defaults_decorator(defaults):
     return decorator
 
 
-def model_docstring(cls, header=None, indent=None, footer=None):
+def model_docstring(cls, header='', indent='', footer=''): #pragma: no cover
     """Return a docstring from a list of defaults.
     """
-    if indent is None:
-        indent = ''
-    if header is None:
-        header = ''
-    if footer is None:
-        footer = ''
-
     #width = 60
     #hbar = indent + width * '=' + '\n'  # horizontal bar
     hbar = '\n'
@@ -102,20 +86,20 @@ class Meta(type): #pragma: no cover
 def is_none(val):
     """Check for values equivalent to None
 
-    This will return True if val is one of None, 'none', 'None', np.nan
+    This will return True if val is one of None, 'none', 'None'
     """
     if not isinstance(val, (type(None), str)):
         return False
-    return val in [None, 'none', 'None', np.nan]
+    return val in [None, 'none', 'None']
 
 def is_not_none(val):
     """Check for values equivalent to None
 
-    This will return True if val is not on of  None, 'none', 'None', np.nan
+    This will return True if val is not on of  None, 'none', 'None'
     """
     if not isinstance(val, (type(None), str)):
         return True
-    return val not in [None, 'none', 'None', np.nan]
+    return val not in [None, 'none', 'None']
 
 
 def cast_type(dtype, value): #pylint: disable=too-many-return-statements
