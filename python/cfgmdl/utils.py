@@ -2,6 +2,9 @@
 """
 A few simple utilities to help parse configurations
 """
+from collections import OrderedDict as odict
+
+import yaml
 
 try:
     basestring
@@ -162,3 +165,13 @@ def cast_type(dtype, value): #pylint: disable=too-many-return-statements
         pass
     msg = "Value of type %s, when %s was expected." % (type(value), dtype)
     raise TypeError(msg)
+
+
+
+def odict_representer(dumper, data):
+    """ http://stackoverflow.com/a/21912744/4075339 """
+    # Probably belongs in a util
+    return dumper.represent_mapping(
+        yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, data.items())
+
+yaml.add_representer(odict, odict_representer)
