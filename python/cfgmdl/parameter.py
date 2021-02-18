@@ -4,11 +4,9 @@
 from copy import deepcopy
 from collections import OrderedDict as odict
 
-from .utils import is_none, is_not_none
 from .property import Property, defaults_decorator
 
 import numpy as np
-import yaml
 
 
 class Parameter(Property):
@@ -47,7 +45,7 @@ class Parameter(Property):
         self.errors_name = '_' + name + '_errors'
         self.free_name = '_' + name + '_free'
         self.scale_name = '_' + name + '_scale'
-        
+
     def __set__(self, obj, value):
         """Set the value in the client object
 
@@ -74,7 +72,7 @@ class Parameter(Property):
             value = dict(value=value)
         else:
             value.setdefault('value', getattr(obj, self.private_name, None))
-            
+
         for key in ['bounds', 'errors', 'scale', 'free']:
             hidden_name = "_%s_%s" % (self.public_name, key)
             if not hasattr(obj, hidden_name):
@@ -86,10 +84,10 @@ class Parameter(Property):
                     if key in ['free']:
                         cast_val = np.array(value[key]).astype(bool)
                     else:
-                        cast_val = np.array(value[key]).astype(float)                                                
+                        cast_val = np.array(value[key]).astype(float)
                 except ValueError as msg:
-                    raise ValueError("Failed to set %s: not %s castable as array" % (hidden_name, value[key]))
-            setattr(obj, hidden_name, cast_val)            
+                    raise ValueError("Failed to set %s: not %s castable as array" % (hidden_name, value[key])) from msg
+            setattr(obj, hidden_name, cast_val)
 
         super(Parameter, self).__set__(obj, value['value'])
 
@@ -122,32 +120,31 @@ class Parameter(Property):
 
         ret += ' +- %s' % errors
         ret += ' [%s]' % bounds
-        ret += ' <%s>' % scale            
+        ret += ' <%s>' % scale
         ret += ' %s' % free
         return ret
 
     def symmetric_error(self, obj):
         """Return the symmertic error
         """
-        errors = getattr(obj, self.errors_name, None)        
+        errors = getattr(obj, self.errors_name, None)
         errors = np.array(errors)
         if not errors.shape:
-            return errors        
+            return errors
         if errors.shape[0] == 2:
             return 0.5 * (errors[0] + errors[1])
         return errors
-        
+
     def check_bounds(self, obj, value):
         """Bounds checking"""
         bounds = getattr(obj, self.bounds_name)
-        if np.isnan(self.bounds).all():
+        if np.isnan(bounds).all():
             return
-        if np.any(value < self.bounds[0]) or np.any(value > self.bounds[1]):
-            msg = "Value outside bounds: %.2g [%.2g,%.2g]" % (value, self.bounds[0], self.bounds[1])
+        if np.any(value < bounds[0]) or np.any(value > bounds[1]):
+            msg = "Value outside bounds: %.2g [%.2g,%.2g]" % (value, bounds[0], bounds[1])
             raise ValueError(msg)
 
-        
+
     def _cast_type(self, value):
         """Hook took override type casting"""
         return np.array(value).astype(float)
-    

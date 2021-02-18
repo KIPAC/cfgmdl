@@ -18,9 +18,14 @@ class Derived(Property):
         ('loader', None, 'Function to load datum')
     ]
 
+    @classmethod
+    def dummy(cls): #pragma: no cover
+        """Dummy function"""
+        return
+
     @defaults_decorator(defaults)
     def __init__(self, **kwargs):
-        self.loader = type(None)
+        self.loader = self.dummy
         super(Derived, self).__init__(**kwargs)
 
     def __get__(self, obj, objtype=None):

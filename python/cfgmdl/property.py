@@ -2,8 +2,6 @@
 """ Tools to manage Properties attached to client classes
 """
 
-from collections import OrderedDict as odict
-
 import time
 from .utils import cast_type, Meta, defaults_decorator, defaults_docstring
 

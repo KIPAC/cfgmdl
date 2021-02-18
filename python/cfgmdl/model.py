@@ -14,7 +14,6 @@ from other model properties.
 from collections import OrderedDict as odict
 
 import numpy as np
-import yaml
 
 from .property import Property
 from .derived import Derived
@@ -327,7 +326,7 @@ class Model:
         l = self.get_params(pnames)
         v = [getattr(self, p.scale_name) for p in l]
         return np.array(v)
-    
+
     def param_free(self, pnames=None):
         """ Return an array with the parameter bounds
 
@@ -364,11 +363,11 @@ class Model:
         s = ""
         for p in l:
             s += p.public_name
-            s += ": "
+            s += ": x"
             s += p.tostr(self)
             s += "\n"
         return s
-    
+
     def todict(self):
         """ Return self cast as an '~collections.OrderedDict' object
         """
