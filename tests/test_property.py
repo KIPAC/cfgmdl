@@ -22,7 +22,10 @@ def check_property(dtype, default, test_val, bad_val=None, cast_val=None):
     assert test_obj.v == default
     assert test_obj.v2 is None
     assert test_obj.v3 == default
+    assert test_obj._properties['v'].default_prefix == ""
+    assert test_obj._properties['v'].default_value('dtype') is None
 
+    
     test_obj.v = test_val
     assert test_obj.v == test_val
 
@@ -97,8 +100,9 @@ def test_property_basics():
 
     test_obj = TestClass()
         
-    help(test_obj.getp('vv'))
+    help(test_obj._vv)
 
+    
 def test_property_none():
     check_property(None, None, None)
     
