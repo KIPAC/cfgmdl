@@ -85,7 +85,10 @@ class Parameter(Property):
         out : ...
             The requested value
         """
-        return getattr(obj, self.private_name).value
+        val = getattr(obj, self.private_name).__call__()
+        if self.unit is None:
+            return val
+        return self.unit(val) #pylint: disable=not-callable
 
     def todict(self, obj):
         """Extract values as an odict """

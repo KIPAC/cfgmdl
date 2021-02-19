@@ -61,3 +61,7 @@ class ParamHolder(Configurable):
             return
         if np.bitwise_or(self.value < self.bounds[0], self.value > self.bounds[-1]).any(): #pylint: disable=unsubscriptable-object
             raise ValueError("Value outside bounds: %.s [%s,%s]" % (self.value, self.bounds[0], self.bounds[-1])) #pylint: disable=unsubscriptable-object
+
+    def __call__(self):
+        """Return the product of the value and the scale"""
+        return self.value * self.scale

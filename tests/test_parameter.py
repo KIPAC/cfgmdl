@@ -3,10 +3,11 @@
 Test the model build
 """
 import numpy as np
-
-from cfgmdl import Model, Parameter
-
 from collections import OrderedDict as odict
+
+from cfgmdl import Model, Parameter, Unit
+Unit.update(dict(mm=1e-3))
+
 
 def test_parameter():
     try:
@@ -32,6 +33,7 @@ def test_parameter():
     
     class TestClass(Model):
         vv = Parameter(default=0.3)
+        vv2 = Parameter(default=0.3, unit=Unit('mm'))
 
     test_obj = TestClass()
 
@@ -44,6 +46,8 @@ def test_parameter():
     test_obj.vv += 0.1
     assert np.allclose(test_obj.vv, [0.4, 0.3, 0.5])
 
+    assert test_obj.vv2 == Unit('mm')(0.3)
+    
     try: test_obj._vv.update(3.3, value=3.3)
     except ValueError: pass
     else: raise ValueError("Failed to catch value error")

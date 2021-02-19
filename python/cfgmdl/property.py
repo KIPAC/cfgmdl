@@ -40,6 +40,7 @@ class Property(Defs):
         ('dtype', (None, 'Data type')),
         ('default', (None, 'Default value')),
         ('required', (False, 'Is this propery required?')),
+        ('unit', (None, 'Units for unit')),
     ])
 
     @defaults_decorator(defaults)
@@ -49,6 +50,7 @@ class Property(Defs):
         self.dtype = type(None)
         self.default = None
         self.required = None
+        self.unit = None
         self.public_name = None
         self.private_name = None
         self.time_name = None
@@ -101,7 +103,10 @@ class Property(Defs):
         out : ...
             The requested value
         """
-        return getattr(obj, self.private_name)
+        attr = getattr(obj, self.private_name)
+        if self.unit is None:
+            return attr
+        return self.unit(attr) #pylint: disable=not-callable
 
     def __delete__(self, obj):
         """Set the value to the default value
