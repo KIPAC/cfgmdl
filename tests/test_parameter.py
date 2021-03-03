@@ -20,14 +20,14 @@ def test_parameter():
         vv = Parameter()
 
     test_obj = TestClass()
-    assert np.isnan(test_obj.vv)
+    assert np.isnan(test_obj.vv())
 
     import pdb
     #pdb.set_trace()
     test_obj.vv = 0.3
-    assert test_obj.vv == 0.3
+    assert test_obj.vv() == 0.3
     test_obj.vv = [0.3, 0.2, 0.4]
-    assert np.allclose(test_obj.vv, [0.3, 0.2, 0.4])
+    assert np.allclose(test_obj.vv(), [0.3, 0.2, 0.4])
 
     help(test_obj._vv)
     
@@ -37,16 +37,16 @@ def test_parameter():
 
     test_obj = TestClass()
 
-    assert test_obj.vv == 0.3
+    assert test_obj.vv() == 0.3
     test_obj.vv = 0.4
-    assert test_obj.vv == 0.4
+    assert test_obj.vv() == 0.4
     test_obj.vv = [0.3, 0.2, 0.4]
-    assert np.allclose(test_obj.vv, [0.3, 0.2, 0.4])
+    assert np.allclose(test_obj.vv(), [0.3, 0.2, 0.4])
 
-    test_obj.vv += 0.1
-    assert np.allclose(test_obj.vv, [0.4, 0.3, 0.5])
+    test_obj.vv.value += 0.1
+    assert np.allclose(test_obj.vv(), [0.4, 0.3, 0.5])
 
-    assert test_obj.vv2 == Unit('mm')(0.3)
+    assert test_obj.vv2() == Unit('mm')(0.3)
     
     try: test_obj._vv.update(3.3, value=3.3)
     except ValueError: pass
@@ -57,15 +57,15 @@ def test_parameter():
     else: raise ValueError("Failed to catch value error")
 
     test_obj._vv.update(dict(value=3.3))
-    assert test_obj.vv == 3.3
+    assert test_obj.vv() == 3.3
     
     test_obj = TestClass(vv=[0.3, 0.2, 0.4])    
-    assert np.allclose(test_obj.vv, [0.3, 0.2, 0.4])
+    assert np.allclose(test_obj.vv(), [0.3, 0.2, 0.4])
 
-    test_obj.vv += 0.1
-    assert np.allclose(test_obj.vv, [0.4, 0.3, 0.5])
+    test_obj.vv.value += 0.1
+    assert np.allclose(test_obj.vv(), [0.4, 0.3, 0.5])
 
     class TestClass(Model):
         vv = Parameter(default=(3.3))
     test_obj = TestClass(vv=3.5)
-    assert test_obj.vv == 3.5
+    assert test_obj.vv() == 3.5

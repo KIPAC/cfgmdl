@@ -200,6 +200,8 @@ def cast_type(dtype, value): #pylint: disable=too-many-return-statements
         return value
     if isinstance(value, Mapping):
         return dtype(**value)
+    if isinstance(value, str):
+        return dtype(value)
     if isinstance(value, Iterable):
         return dtype(*value)
     try:

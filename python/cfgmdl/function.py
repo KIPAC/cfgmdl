@@ -8,6 +8,7 @@ from collections.abc import Iterable
 from jax import grad, jacfwd, jacrev
 import jax.numpy as jnp
 
+from .param_holder import ParamHolder
 
 def check_inputs(x, inputs):
     """Convert inputs to arrays"""
@@ -23,10 +24,12 @@ def check_inputs(x, inputs):
         return ret
 
     for inp in inputs:
-        if callable(inp):
-            ret.append(inp(x).astype(np.float))
-        elif inp is None:
+        if inp is None:
             ret.append(np.full(x.shape, np.nan))
+        elif isinstance(inp, ParamHolder):
+            ret.append(inp.value)
+        elif callable(inp):
+            ret.append(inp(x).astype(np.float))
         elif isinstance(inp, np.ndarray):
             ret.append(inp)
         elif isinstance(inp, (Iterable, int, float)):
