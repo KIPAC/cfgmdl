@@ -101,6 +101,9 @@ def test_model():
     check = t.der
     assert check==8.
 
+    assert t.getp('opt').default == 1.0
+    assert t.getp('req').required
+
     try:
         t2 = test_class(var=2.)
         check = t.der

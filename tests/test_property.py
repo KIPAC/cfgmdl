@@ -120,11 +120,17 @@ def test_property_string():
 def test_property_int():
     check_property(int, 1, 2, "aa")
 
+def test_property_int2():
+    check_property(int, 1, 2, float)
+
 def test_property_float():
     check_property(float, 1., 2., "aa", 1)
 
 def test_property_list():
     check_property(list, [], [3, 4], None)
+
+def test_property_list():
+    check_property(list, [], [3, 4], None, (3,4))
 
 def test_property_dict():
     check_property(dict, {}, {3:4})

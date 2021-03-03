@@ -3,7 +3,7 @@
 A few simple utilities to help parse configurations
 """
 from collections import OrderedDict as odict
-from collections.abc import Mapping, Iterable
+from collections.abc import Mapping
 
 import yaml
 
@@ -202,8 +202,6 @@ def cast_type(dtype, value): #pylint: disable=too-many-return-statements
         return dtype(**value)
     if isinstance(value, str):
         return dtype(value)
-    if isinstance(value, Iterable):
-        return dtype(*value)
     try:
         return dtype(value)
     except (TypeError, ValueError):
